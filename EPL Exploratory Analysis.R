@@ -12,7 +12,7 @@
 table(EPL$AY) 
 which(EPL$AY == 9)
 EPL[685,]
-#only match with 9 Away YCs (highest of any match) was the one that decided that Leiceister won the league!
+#only match with 9 Away YCs (highest of any match) was the one that decided that Leicester won the league!
 
 #Home Yellow Cards
 table(EPL$HY)
