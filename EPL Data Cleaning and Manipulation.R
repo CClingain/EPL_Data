@@ -177,6 +177,7 @@ EPL <- full_join(EPL, s00.01)
 
 #Making a season column
 EPL <- EPL %>% mutate(season = Date)
+EPL$season <- as.character(EPL$season)
 #to change this, I can using indexing since I know the order in which I merged the data sets
 EPL[1:280,23] <- "17/18"
 EPL[281:660, 23] <- "16/17"
@@ -210,4 +211,4 @@ EPL <- EPL[order(EPL$Date, decreasing=T),]
 
 #save dataset
 library(readr)
-write_excel_csv(EPL, "EPL.csv")
+write_excel_csv(EPL, "~/EPL Data/Clean Data/EPL.csv")
