@@ -5,4 +5,4 @@ All data is publicly available through http://www.football-data.co.uk/englandm.p
 
 All the individual season data sets are upload as .csv files.
 
-The merged (mater) EPL file will also be available as .csv
+The merged (master) EPL file will also be available as a .csv file upon completion.
