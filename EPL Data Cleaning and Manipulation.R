@@ -207,3 +207,7 @@ EPL$year <- format(EPL$year,"%Y")
 unique(EPL$year)
 #Now let's put the matches in chronological order
 EPL <- EPL[order(EPL$Date, decreasing=T),]
+
+#save dataset
+library(readr)
+write_excel_csv(EPL, "EPL.csv")
