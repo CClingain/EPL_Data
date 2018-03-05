@@ -34,8 +34,7 @@ median(EPL$AY)
 median(EPL$HY)
 
 #Since we don't have normality
-wilcox.test(EPL$AY, EPL$HY)
-
+wilcox.test(EPL$AY, EPL$HY, alternative = "two.sided")
 
 #Away Red Cards
 table(EPL$AR)
