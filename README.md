@@ -13,4 +13,5 @@ The merged (master) EPL file will also be available as a .csv file upon completi
 2. During a season, does momentum matter in terms of results?
 3. Can we use unsupervised learning techniques (Nagin clustering) to determine which teams are on the up and which on the down? (for eg: Arsenal :D)
 4. How much does home advantage matter?
+5. Has EPL Television rights deal closed the gap between Top4/6 and the rest?
 
