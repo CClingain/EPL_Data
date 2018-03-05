@@ -22,7 +22,7 @@ plot(density(EPL$AY), main = "Yellow Cards per Match 2000-2018", xlab = "# of Ye
 lines(density(EPL$HY), col = "red")
 
 #the pretty viz!
-plot(density(EPL$HY),main = "Yellow Cards per Match 2000-2018", xlab = "# of Red Cards", lty = "solid", bty = "l", xlim=c(0,10))
+plot(density(EPL$HY),main = "Yellow Cards per Match 2000-2018", xlab = "# of Yellow Cards", lty = "solid", bty = "l", xlim=c(0,10))
 polygon(density(EPL$HY), col = rgb(red = 139, green = 0, blue = 0, alpha = 100, maxColorValue = 255), lty = "solid")
 polygon(density(EPL$AY), col = rgb(red = 0, green = 0, blue = 130, alpha = 100, maxColorValue = 255), lty = "dotted")
 legend(x = 4, y = 0.6, legend = c("Home Yellow Cards","Away Yellow Cards"),
@@ -35,6 +35,7 @@ median(EPL$HY)
 
 #Since we don't have normality
 wilcox.test(EPL$AY, EPL$HY, alternative = "two.sided")
+#however, large enough sample size, could find sig diference...
 
 #Away Red Cards
 table(EPL$AR)
