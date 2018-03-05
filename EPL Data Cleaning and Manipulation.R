@@ -219,7 +219,7 @@ write_excel_csv(EPL, "~/EPL Data/Clean Data/EPL.csv")
 Teams <- c("Arsenal","Bournemouth","Brighton and Hove Albion","Burnley","Chelsea","Crystal Palace",
            "Everton","Huddersfield Town","Leicester City","Liverpool","Manchester City","Manchester United",
            "Newcastle","Southampton","Stoke City","Swansea","Tottenham Hotspur","Watford","West Bromwich Albion","West Ham United")
-Week29 <- c(45,33,34,40,53,27,34,30,37,60,78,59,29,28,27,30,58,36,20,30)
+Week29 <- c(45,33,34,40,53,27,34,30,37,60,78,62,29,28,27,30,58,36,20,30)
 Week28 <- c(45,32,31,37,53,27,34,30,36,57,75,59,29,27,26,27,55,33,20,30)
 Week27 <- c(45,31,28,36,53,27,34,27,35,54,72,56,28,26,25,27,52,30,20,30)
 Week26 <- c(45,31,27,36,50,27,31,24,35,51,69,56,25,26,24,24,49,30,20,27)
@@ -256,5 +256,10 @@ PointsTable <- data.frame(Teams, Week29, Week28, Week27, Week26, Week25,
                        Week12, Week11, Week10, Week09, Week08, Week07,
                         Week06, Week05, Week04, Week03, Week02, Week01, stringsAsFactors = F)
 
+library(readr)
 write_excel_csv(PointsTable, "~/EPL Data/Clean Data/PointsTable17-18.csv")
 
+##################################################################################################
+###Final Standings for 00/01 to 16/17
+
+Standings <- data.frame()
