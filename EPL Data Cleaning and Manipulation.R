@@ -219,6 +219,7 @@ write_excel_csv(EPL, "~/EPL Data/Clean Data/EPL.csv")
 Teams <- c("Arsenal","Bournemouth","Brighton and Hove Albion","Burnley","Chelsea","Crystal Palace",
            "Everton","Huddersfield Town","Leicester City","Liverpool","Manchester City","Manchester United",
            "Newcastle","Southampton","Stoke City","Swansea","Tottenham Hotspur","Watford","West Bromwich Albion","West Ham United")
+Week30 <- c(48,33,34,43,56,27,37,31,40,60,78,65,32,28,27,31,61,36,20,30)
 Week29 <- c(45,33,34,40,53,27,34,30,37,60,78,62,29,28,27,30,58,36,20,30)
 Week28 <- c(45,32,31,37,53,27,34,30,36,57,75,59,29,27,26,27,55,33,20,30)
 Week27 <- c(45,31,28,36,53,27,34,27,35,54,72,56,28,26,25,27,52,30,20,30)
@@ -250,7 +251,7 @@ Week02 <- c(3,0,0,3,3,0,4,6,3,4,6,4,0,4,3,1,3,4,6,0)
 Week01 <- c(3,0,0,3,0,0,3,3,0,1,3,3,0,1,0,1,3,1,3,0)
 
 #Putting it all together into a data frame
-PointsTable <- data.frame(Teams, Week29, Week28, Week27, Week26, Week25, 
+PointsTable <- data.frame(Teams, Week30,Week29, Week28, Week27, Week26, Week25, 
                        Week24, Week23,Week22, Week21, Week20, Week19,
                        Week18, Week17, Week16, Week15, Week14, Week13,
                        Week12, Week11, Week10, Week09, Week08, Week07,
