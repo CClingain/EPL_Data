@@ -18,7 +18,7 @@ PointsTable.long<- reshape(PointsTable[,2:31], varying=c("Week01","Week02", "Wee
 ```
 
 
-```{r include=FALSE}
+```{r, eval=FALSE, include=FALSE}
 library(plotly)
 #Comparing all 20 teams
 a <- plot_ly(PointsTable.long, x = ~Time[Teams==1], y = ~Week[Teams==1], name = 'Arsenal', type = 'scatter', mode = 'lines') %>%
@@ -44,7 +44,8 @@ a <- plot_ly(PointsTable.long, x = ~Time[Teams==1], y = ~Week[Teams==1], name = 
   layout(title = "Point Accumulation for 2017-2018 season", xaxis = list(title = "Week"), yaxis = list(title = "# of points"))
 ```
 
-```{r echo=FALSE}
+```{r, eval=FALSE, echo=FALSE}
 a
 ```
 
+https://plot.ly/~CClingain/1/
