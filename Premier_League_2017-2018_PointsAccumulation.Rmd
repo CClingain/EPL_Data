@@ -8,7 +8,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 We've created some interactive plots using plotly! Since GitHub can't handle the JavaScript or html for this file, you can access the plot by clicking this link: 
 ```{r include=FALSE}
-PointsTable <- read.csv("~/EPL Data/Clean Data/PointsTable17-18.csv")
+PointsTable <- read.csv("Clean Data/PointsTable17-18.csv")
 #reshaping the Points Table for 2017-2018 for graphing purposes
 PointsTable.long<- reshape(PointsTable[,2:31], varying=c("Week01","Week02", "Week03", "Week04", "Week05", "Week06", "Week07", "Week08","Week09", "Week10", "Week11", "Week12","Week13", "Week14", "Week15", "Week16", "Week17", "Week18","Week19", "Week20", "Week21", "Week22", "Week23", "Week24",
 "Week25", "Week26", "Week27", "Week28", "Week29", "Week30"),                                 v.names='Week',timevar="Time",idvar="Teams",direction="long")
