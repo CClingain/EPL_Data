@@ -219,7 +219,7 @@ write_excel_csv(EPL, "~/EPL Data/Clean Data/EPL.csv")
 Teams <- c("Arsenal","Bournemouth","Brighton and Hove Albion","Burnley","Chelsea","Crystal Palace",
            "Everton","Huddersfield Town","Leicester City","Liverpool","Manchester City","Manchester United",
            "Newcastle","Southampton","Stoke City","Swansea","Tottenham Hotspur","Watford","West Bromwich Albion","West Ham United")
-Week30 <- c(48,33,34,43,56,27,37,31,40,60,78,65,32,28,27,31,61,36,20,30)
+Week30 <- c(48,33,34,43,56,27,37,31,40,60,81,65,32,28,27,31,61,36,20,30)
 Week29 <- c(45,33,34,40,53,27,34,30,37,60,78,62,29,28,27,30,58,36,20,30)
 Week28 <- c(45,32,31,37,53,27,34,30,36,57,75,59,29,27,26,27,55,33,20,30)
 Week27 <- c(45,31,28,36,53,27,34,27,35,54,72,56,28,26,25,27,52,30,20,30)
