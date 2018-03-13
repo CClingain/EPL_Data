@@ -1,14 +1,12 @@
 ---
 title: "Premier League 2017-2018 Point Acculmulation"
-author: "Clare Clingain"
-date: "March 13, 2018"
 output: github_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
+We've created some interactive plots using plotly! Since GitHub can't handle the JavaScript or html for this file, you can access the plot by clicking this link: 
 ```{r include=FALSE}
 PointsTable <- read.csv("~/EPL Data/Clean Data/PointsTable17-18.csv")
 #reshaping the Points Table for 2017-2018 for graphing purposes

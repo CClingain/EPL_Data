@@ -105,8 +105,10 @@ a <- plot_ly(PointsTable.long, x = ~Time[Teams==1], y = ~Week[Teams==1], name = 
   add_trace(y = ~Week[Teams==15], name = "Stoke", mode = 'lines') %>%
   add_trace(y = ~Week[Teams==16], name = "Swansea", mode = 'lines') %>%
   add_trace(y = ~Week[Teams==17], name = "Tottenham", mode = 'lines') %>%
-  add_trace(y = ~Week[Teams==18], name = "watford", mode = 'lines') %>%
+  add_trace(y = ~Week[Teams==18], name = "Watford", mode = 'lines') %>%
   add_trace(y = ~Week[Teams==19], name = "West Brom", mode = 'lines') %>%
   add_trace(y = ~Week[Teams==20], name = "West Ham", mode = 'lines') %>%
   layout(title = "Point Accumulation for 2017-2018 season", xaxis = list(title = "Week"), yaxis = list(title = "# of points"))
 a
+
+##################################################################################################
