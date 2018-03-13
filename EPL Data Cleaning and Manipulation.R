@@ -261,6 +261,7 @@ PointsTable <- data.frame(Teams, Week30,Week29, Week28, Week27, Week26, Week25,
 library(readr)
 write_excel_csv(PointsTable, "~/EPL Data/Clean Data/PointsTable17-18.csv")
 
+
 ##################################################################################################
 ###Final Standings for 00/01 to 16/17
 
