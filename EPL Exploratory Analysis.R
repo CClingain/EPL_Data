@@ -83,7 +83,7 @@ WestHam <- PointsTable.long %>% filter(Teams == 20)
 plot(Arsenal$Time, Arsenal$Week, type ="l", col = 2, xlab = "Week", ylab = "Points", ylim = c(0,90))
 lines(Bournemouth$Time, Bournemouth$Week, col = 3)
 lines(ManCity$Time, ManCity$Week, col = 4)
-
+#K, this code may be useful for building an R shiny app!
 
 #Now to upgrade the plots! We don't need the restructured data set for this either -- very helpful
 library(plotly)
