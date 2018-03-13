@@ -257,6 +257,7 @@ PointsTable <- data.frame(Teams, Week30,Week29, Week28, Week27, Week26, Week25,
                        Week12, Week11, Week10, Week09, Week08, Week07,
                         Week06, Week05, Week04, Week03, Week02, Week01, stringsAsFactors = F)
 
+#Saving as an excel file for ease of use/more accessible for others
 library(readr)
 write_excel_csv(PointsTable, "~/EPL Data/Clean Data/PointsTable17-18.csv")
 
