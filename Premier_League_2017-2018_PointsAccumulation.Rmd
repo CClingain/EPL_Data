@@ -2,7 +2,7 @@
 title: "Premier League 2017-2018 Point Acculmulation"
 author: "Clare Clingain"
 date: "March 13, 2018"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
