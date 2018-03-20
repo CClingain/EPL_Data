@@ -35,8 +35,8 @@ head(EPL)
  - Fouls_Committed_Total
  - Fouls_Against_Total
  - Corners
- - Corners_Total
  - Corners_Conceded
+ - Corners_Total
  - Corners_Conceded_Total
  - Yellow_Cards
  - Yellow_Cards_Total
