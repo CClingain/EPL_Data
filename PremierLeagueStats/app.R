@@ -62,17 +62,17 @@ server <- function(input, output) {
     var <- gsub("_", " ", input$z, fixed=TRUE)
     Team1 <- data1$Team[1]
     Team2 <- data2$Team[1]
-  # title <-  paste(data1$Team[1], "vs", data2$Team[1], "on", var)
+  title <-  paste(data1$Team[1], "vs", data2$Team[1], "on", var)
    #   title <-  paste(Team1, "vs", Team2) 
-    yaxis <- paste(gsub("_", " ", input$z, fixed=TRUE))
+    ylab <- paste(gsub("_", " ", input$z, fixed=TRUE))
     names <- c(data1$Team[1],data2$Team[1])
     
     # draw the plot
     
-  plot(data1$Week, as.vector(as.matrix(data1[colnames(data1)==input$z])), type ="l", col = 2, xlab = "Week", ylab = ylab, ylim = c(0,90), xlim = c(0,38), main = "", cex.lab = 1.5)
+  plot(data1$Week, as.vector(as.matrix(data1[colnames(data1)==input$z])), type ="l", col = 2, xlab = "Week", ylab = ylab, ylim = c(0,max(as.vector(as.matrix(data1[colnames(data1)==input$z])),as.vector(as.matrix(data2[colnames(data2)==input$z])))), xlim = c(0,38), main = "", cex.lab = 1.5)
     lines(data2$Week, as.vector(as.matrix(data2[colnames(data2)==input$z])), col = 4)
-   # title(main= title)
-    legend("topleft",legend=names,pch=15, fill=c(2,4), cex=1)
+    title(main= title)
+    legend("topleft",legend=c(paste(Team1), paste(Team2)), fill=c(2,4), cex=1)
      })
 }
 
