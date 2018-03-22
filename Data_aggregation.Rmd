@@ -9,6 +9,7 @@ The purpose of this file is to structure the data in a format which makes aggreg
 
 ```{r}
 EPL <- read.csv("Clean Data/EPL.csv")
+colnames(EPL) <- c("Date",colnames(EPL)[-1])
 head(EPL)
 ```
  The structure of the reformatted table will be as follows:
@@ -77,27 +78,27 @@ for(i in seq_along(unique_seasons)){ ## looping through each season
       team.df[(k+1),7] <- ifelse(h_a == 1,games[k,4],games[k,5])
       team.df[(k+1),8] <- ifelse(h_a == 1,games[k,5],games[k,4])
       team.df[(k+1),9] <- (team.df[(k+1),7] > team.df[(k+1),8])*2 + 1 - (team.df[(k+1),7] < team.df[(k+1),8])*1
-      team.df[(k+1),10] <- team.df[(k),9] + team.df[(k+1),9]
+      team.df[(k+1),10] <- team.df[(k),10] + team.df[(k+1),9]
       team.df[(k+1),11] <- ifelse(h_a == 1,games[k,11],games[k,12])
       team.df[(k+1),12] <- ifelse(h_a == 1,games[k,12],games[k,11])
-      team.df[(k+1),13] <- team.df[(k),11] + team.df[(k+1),11]
-      team.df[(k+1),14] <- team.df[(k),12] + team.df[(k+1),12]
+      team.df[(k+1),13] <- team.df[(k),13] + team.df[(k+1),11]
+      team.df[(k+1),14] <- team.df[(k),14] + team.df[(k+1),12]
       team.df[(k+1),15] <- ifelse(h_a == 1,games[k,13],games[k,14])
       team.df[(k+1),16] <- ifelse(h_a == 1,games[k,14],games[k,13])
-      team.df[(k+1),17] <- team.df[(k),15] + team.df[(k+1),15]
-      team.df[(k+1),18] <- team.df[(k),16] + team.df[(k+1),16]
+      team.df[(k+1),17] <- team.df[(k),17] + team.df[(k+1),15]
+      team.df[(k+1),18] <- team.df[(k),18] + team.df[(k+1),16]
       team.df[(k+1),19] <- ifelse(h_a == 1,games[k,15],games[k,16])
       team.df[(k+1),20] <- ifelse(h_a == 1,games[k,16],games[k,15])
-      team.df[(k+1),21] <- team.df[(k),19] + team.df[(k+1),19]
-      team.df[(k+1),22] <- team.df[(k),20] + team.df[(k+1),20]
+      team.df[(k+1),21] <- team.df[(k),21] + team.df[(k+1),19]
+      team.df[(k+1),22] <- team.df[(k),22] + team.df[(k+1),20]
       team.df[(k+1),23] <- ifelse(h_a == 1,games[k,17],games[k,18])
       team.df[(k+1),24] <- ifelse(h_a == 1,games[k,18],games[k,17])
-      team.df[(k+1),25] <- team.df[(k),23] + team.df[(k+1),23]
-      team.df[(k+1),26] <- team.df[(k),24] + team.df[(k+1),24]
+      team.df[(k+1),25] <- team.df[(k),25] + team.df[(k+1),23]
+      team.df[(k+1),26] <- team.df[(k),26] + team.df[(k+1),24]
       team.df[(k+1),27] <- ifelse(h_a == 1,games[k,19],games[k,20])
-      team.df[(k+1),28] <- team.df[(k),27] + team.df[(k+1),27]
+      team.df[(k+1),28] <- team.df[(k),28] + team.df[(k+1),27]
       team.df[(k+1),29] <- ifelse(h_a == 1,games[k,21],games[k,22])
-      team.df[(k+1),30] <- team.df[(k),29] + team.df[(k+1),29]
+      team.df[(k+1),30] <- team.df[(k),30] + team.df[(k+1),29]
     }
     team.df <- team.df[-1,]
     season.df <- rbind(season.df,team.df)
