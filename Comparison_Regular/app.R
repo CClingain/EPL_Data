@@ -41,7 +41,7 @@ ui <- fluidPage(
    )
 )
 
-# Define server logic required to draw a histogram
+# Define server logic required
 server <- function(input, output) {
    #data
   Teams <- c("Arsenal","Bournemouth","Brighton and Hove Albion","Burnley","Chelsea","Crystal Palace",
@@ -96,13 +96,13 @@ server <- function(input, output) {
   
   
    output$distPlot <- renderPlot({
-      # generate bins based on input$bins from ui.R
+      # generate teams
       
       data1 <- PointsTable.long %>% filter(Teams == input$x)
       data2 <- PointsTable.long %>% filter(Teams == input$y)
       title <-  paste(Teams[data1$Teams[1]], "vs", Teams[data2$Teams[1]]) 
       names <- c(Teams[data1$Teams[1]],Teams[data2$Teams[1]])
-      # draw the histogram with the specified number of bins
+      # draw the plot
       plot(data1$Time, data1$Week, type ="l", col = 2, xlab = "Week", ylab = "Points", ylim = c(0,90), xlim = c(0,30), main = title, cex.main = 2, cex.lab = 1.5)
       lines(data2$Time, data2$Week, col = 4)
       legend("topleft", names,pch=15, col= c(2,4), cex =1)
