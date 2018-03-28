@@ -32,13 +32,15 @@ ui <- fluidPage(
                      label = "Season",
                      choices = unique(EPL_aggregate$Season)),
       selectizeInput(inputId = "z",
-                     label = "Statistic",
+                     label = "Statistic*",
                      choices = c("Shots Taken" = "Shots_Taken_Total","Shots Conceded" = "Shots_Conceded_Total",
                                  "Shots on Target" = "Shots_on_Target_Total","Shots on Target Conceded" = "Shots_on_Target_Conceded_Total",
                                  "Fouls Committed" = "Fouls_Committed_Total", "Fouls Against" = "Fouls_Against_Total",
                                  "Corners" = "Corners_Total", "Corners Conceded" = "Corners_Conceded_Total",
                                  "Yellow Cards" = "Yellow_Cards_Total", "Red Cards" = "Red_Cards_Total") ,
-                     selected = "Shots Taken")
+                     selected = "Shots Taken"),
+      p("*All statistics are aggregated over the season."),
+      p("NOTE: A team that was not in the Premier League for a specific season will appear as NA in the legend.")
     ),
     
     # Show a plot of the generated distribution
