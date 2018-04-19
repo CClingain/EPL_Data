@@ -19,7 +19,7 @@ ui <- fluidPage(
   # Sidebar with a slider input for number of bins 
   sidebarLayout(
     sidebarPanel(
-           selectizeInput(inputId = "x",
+      selectizeInput(inputId = "x",
                      label = "Team 1",
                      choices = unique(EPL_aggregate$Team),
                      selected = "Liverpool"),
@@ -45,7 +45,8 @@ ui <- fluidPage(
     
     # Show a plot of the generated distribution
     mainPanel(
-      plotOutput("distPlot")
+      plotOutput("distPlot"),
+      plotOutput("newPlot")
     )
   )
 )
@@ -54,8 +55,8 @@ ui <- fluidPage(
 server <- function(input, output) {
   #data
   #read csv
-    EPL_aggregate <- read.csv("EPL_aggregate.csv")
-    Team <- unique(EPL_aggregate$Team)
+  EPL_aggregate <- read.csv("EPL_aggregate.csv")
+  Team <- unique(EPL_aggregate$Team)
   output$distPlot <- renderPlot({
     # select team and season
     
@@ -64,8 +65,8 @@ server <- function(input, output) {
     var <- gsub("_", " ", input$z, fixed=TRUE)
     Team1 <- data1$Team[1]
     Team2 <- data2$Team[1]
-  title <-  paste(data1$Team[1], "vs", data2$Team[1], "on", var)
-   #   title <-  paste(Team1, "vs", Team2) 
+    title <-  paste(data1$Team[1], "vs", data2$Team[1], "on", var)
+    #   title <-  paste(Team1, "vs", Team2) 
     ylab <- paste(gsub("_", " ", input$z, fixed=TRUE))
     names <- c(data1$Team[1],data2$Team[1])
     
@@ -73,11 +74,35 @@ server <- function(input, output) {
     
     par(mar=c(3, 4, 3, 2), oma=c(0,0,0,0), bg="#F0F0F0", xpd=FALSE, xaxs="r", yaxs="i", mgp=c(2.1,.3,0), las=1, col.axis="#434343", col.main="#343434", tck=0, lend=1)
     
-  plot(data1$Week, as.vector(as.matrix(data1[colnames(data1)==input$z])), type ="l", col = 2, xlab = "Week", ylab = ylab, ylim = c(0,max(as.vector(as.matrix(data1[colnames(data1)==input$z])),as.vector(as.matrix(data2[colnames(data2)==input$z])))), xlim = c(0,38), main = "", cex.lab = 1.5)
-    lines(data2$Week, as.vector(as.matrix(data2[colnames(data2)==input$z])), col = 4)
+    plot(data1$Week, as.vector(as.matrix(data1[colnames(data1)==input$z])), type ="l", col = 2, xlab = "Week", ylab = ylab, ylim = c(0,max(as.vector(as.matrix(data1[colnames(data1)==input$z])),as.vector(as.matrix(data2[colnames(data2)==input$z])))), xlim = c(0,38), main = "", cex.lab = 1.5,lwd=2)
+    lines(data2$Week, as.vector(as.matrix(data2[colnames(data2)==input$z])), col = 4,lwd=2)
     title(main= title)
     legend("topleft",legend=c(paste(Team1), paste(Team2)), fill=c(2,4), cex=1)
-     })
+  })
+  
+  output$newPlot <- renderPlot({
+    # select team and season
+    
+    data1 <- EPL_aggregate %>% filter(Team == input$x) %>% filter(Season == input$y)
+    data2 <- EPL_aggregate %>% filter(Team == input$a) %>% filter(Season == input$y)
+    var <- gsub("_", " ", input$z, fixed=TRUE)
+    Team1 <- data1$Team[1]
+    Team2 <- data2$Team[1]
+    title <-  paste("Week by Week:",data1$Team[1], "vs", data2$Team[1], "on", gsub("Total","",var))
+    #   title <-  paste(Team1, "vs", Team2) 
+    ylab <- paste(gsub("_", " ", input$z, fixed=TRUE))
+    names <- c(data1$Team[1],data2$Team[1])
+    #prepare the data
+    name1 <- gsub("_Total","", input$z)
+    count <- cbind(as.vector(as.matrix(data1[colnames(data1)==as.character(name1)])),
+                   as.vector(as.matrix(data2[colnames(data2)==as.character(name1)])))
+    # draw the plot
+    
+    par(mar=c(3, 4, 3, 2), oma=c(0,0,0,0), bg="#F0F0F0", xpd=FALSE, xaxs="r", yaxs="i", mgp=c(2.1,.3,0), las=1, col.axis="#434343", col.main="#343434", tck=0, lend=1)
+    barplot(count, col = c(2,4), xlab = "Week", ylab = ylab,space=c(0,.2), ylim = c(0,max(as.vector(as.matrix(data1[colnames(data1)==as.character(name1)])),as.vector(as.matrix(data2[colnames(data2)==as.character(name1)])))), xlim = c(1,76), main = "", cex.lab = 1.5, beside = T, names.arg = rep(1:38,each=2))
+    title(main= title)
+    legend("topleft",legend=c(paste(Team1), paste(Team2)), fill=c(2,4), cex=1)
+  })
 }
 
 # Run the application 
