@@ -43,8 +43,8 @@ require(phyclust)
 RRand(km.2$clust, comp.2)
 
 
-#MDS
-mds.2 <-cmdscale(dist(EPL_Cluster[,-(1:4)]),k=12)
+#MDS -- want to separate by 2 dimensions
+mds.2 <-cmdscale(dist(EPL_Cluster[,-(1:4)]),k=2)
 pairs(mds.2)
 plot(mds.2)
 text(mds.2, labels = EPL_Cluster$Team, col = km.2$clust, cex=.5,pos=3)
