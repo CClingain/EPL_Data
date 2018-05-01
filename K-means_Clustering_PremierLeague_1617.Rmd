@@ -118,13 +118,15 @@ The *C(g)* for a 3-cluster solution is worse than that for a 2-cluster solution,
 
 ## Silhouette Plot
 
-First, we examine the silhouette plot of the clusters. The average silhouette width is 0.51, with Cluster 1 having a width of 0.47 and Cluster 2 having a width of 0.54. These widths suggest that our clusters are separated enough from each other such that the data points are well clustered. 
-
-It is important to note that Everton (Team 6) has a rather small silhouette width. Since it's width is not negative, which would suggest a mismatch, we will continue on with the analysis. 
+First, we examine the silhouette plot of the clusters. 
 
 ```{r silhouette widths, fig.width=6, fig.height=4}
 plot(silhouette(km.2$clust, dist(EPL_Cluster[5:16])), main = "Silhouette Plot: 2 Cluster Solution")
 ```
+
+The average silhouette width is 0.51, with Cluster 1 having a width of 0.47 and Cluster 2 having a width of 0.54. These widths suggest that our clusters are separated enough from each other such that the data points are well clustered. 
+
+It is important to note that Everton (Team 6) has a rather small silhouette width. Since it's width is not negative, which would suggest a mismatch, we will continue on with the analysis. 
 
 ## Plotting on Two Dimensions
 
@@ -138,7 +140,7 @@ plot(EPL_Cluster[,c(14,16)],col=km.2$clust,pch=1,cex=1.5, lwd=2,
 text(EPL_Cluster[,c(14,16)],labels=EPL_Cluster$Team,col=km.2$clust, cex=.5,pos=3)
 ```
 
-Here we see two pretty well separated clusters. Most noteably, Cluster 2 contains the typical top4/6 teams -- Liverpool, Chelsea, Manchester City, Tottenham, Manchester United, Arsenal -- but also houses Southampton and Everton. 
+Here we see two pretty well separated clusters. Most noteably, Cluster 2 contains the typical top4/6 teams - Liverpool, Chelsea, Manchester City, Tottenham, Manchester United, Arsenal - but also houses Southampton and Everton. 
 
 # Comparison to Hierarchical Clustering
 
@@ -215,7 +217,13 @@ plot3d(pca$scores[,1:3], cex=1.5)
 text3d(pca$scores[,1:3], text=EPL_Cluster$Team, cex=.5)
 ```
 
-2 components:
+## Defining the components
+
+```{r defining pca}
+pca$loadings
+```
+
+3 components:
 
 **Component 1: Attack versus Defense **
 
@@ -225,14 +233,10 @@ text3d(pca$scores[,1:3], text=EPL_Cluster$Team, cex=.5)
   
   -Main contributors: Yellow Card, Fouls Committed
   
-**Component 3: ??? Mutual Agression**
+**Component 3: Mutual Agression**
 
   -Main contributors: Red Card, Fouls Against
-  
-**Component 4: ??? Dirty Play/Few Fouls Committed Against You**
 
-  -Main contributors: Red Card, Fouls Against
-  
 # Revisiting MDS
 
 The first three components have eigen values greater than 1, and also explain $\sim$ 83.70% of the variance, so we conduct MDS with three dimensions.
