@@ -12,6 +12,7 @@ require(mclust)
 library(NbClust)
 require(phyclust)
 library(cluster)
+library(rgl)
 EPL_aggregate <- read.csv("Clean Data/EPL_aggregate.csv")
 ```
 
@@ -161,8 +162,106 @@ There are 12 possible dimensions which we can use to separate the 20 premier lea
 ```{r MDS}
 mds.2 <-cmdscale(dist(EPL_Cluster[,-(1:4)]),k=2)
 pairs(mds.2)
-plot(mds.2)
+plot(mds.2, ylim = c(-100,100), xlim = c(-250,275))
 text(mds.2, labels = EPL_Cluster$Team, col = km.2$clust, cex=.5,pos=3)
 ```
 
-This solution is not as satisfying as the k-means solution, but still suggests that there exists such a distance between the top4/6 teams and the rest. In particular, we see that relegated Sunderland and Hull are the farthest from the top4/6 teams on the first dimension. 
+This solution is not as satisfying as the k-means solution, but still suggests that there exists such a distance between the top4/6 teams and the rest. In particular, we see that relegated Sunderland and Hull are the farthest from the top4/6 teams on the first dimension. In a way, we can argue that the first dimension may primarily be attacking. Similarly, Manchester United and Arsenal are some distance away from Liverpool, Manchester City, Tottenham, and Chelsea, all of whom finished in the top 4. 
+
+# Principal Components Analysis (PCA)
+
+```{r PCA}
+EPL_Cluster_std<- EPL_Cluster;
+EPL_Cluster_std[,-(1:4)] <- scale(EPL_Cluster[,-(1:4)])
+pca<- princomp(EPL_Cluster_std[,-(1:4)])
+summary(pca)
+screeplot(pca,type="l")
+eigen(cor(EPL_Cluster_std[,-(1:4)]))$values #first three good enough
+plot(pca$scores[,1:2],col=1)
+text(pca$scores[,1:2],col=1, labels=EPL_Cluster$Team,cex=.5)
+#3D plot
+plot3d(pca$scores[,1:3], cex=1.5)
+text3d(pca$scores[,1:3], text=EPL_Cluster$Team, cex=.5)
+```
+
+2 components:
+
+**Component 1: Attack versus Defense **
+
+  -Main contributors: Shots Target, Shots Target Conceded, Shots, Shots Conceded, Goals, Goals        Conceded, Corners, Corners Conceded
+  
+**Component 2: Agressive play (cannot distinguish if aggressive play is attacking or defending)**
+  
+  -Main contributors: Yellow Card, Fouls Committed
+  
+**Component 3: ??? Mutual Agression**
+
+  -Main contributors: Red Card, Fouls Against
+  
+**Component 4: ??? Dirty Play/Few Fouls Committed Against You**
+
+  -Main contributors: Red Card, Fouls Against
+  
+# Revisiting MDS
+
+```{r MDS pt 2}
+mds.3 <-cmdscale(dist(EPL_Cluster[,-(1:4)]),k=3)
+pairs(mds.3)
+plot(mds.3, ylim = c(-100,100), xlim = c(-250,275))
+text(mds.3, labels = EPL_Cluster$Team, col = km.2$clust, cex=.5,pos=3)
+```
+
+# Clustering on PCA
+
+Although there is controversy in clustering on PCA, we want to see if it better separates the teams.
+
+## Two-Cluster Solution
+
+Once again, we start with a two-cluster solution. 
+
+```{r kmeans PCA}
+set.seed(2011)
+km.2pca <- kmeans(pca$scores, 2, nstart= 100)
+c.crit(km.2pca)$C.g
+```
+
+The *C(g)* is 15.868.
+
+## Three-Cluster Solution
+
+For comparison, we run a three-cluster k-means model. 
+
+```{r kmeans PCA 3 clusters}
+set.seed(2011)
+km.3pca <- kmeans(pca$scores, 3, nstart= 100)
+c.crit(km.3pca)$C.g
+```
+
+Once again, three cluster solution is not an improvement, *C(g)* = 11.167. We will stick with our two clusters. 
+
+## Exploring the Two-Cluster Solution
+
+There are no differences in the teams assigned to each cluster across the two solutions. 
+
+```{r compare km2 and km2pca}
+xtabs(~km.2$cluster+km.2pca$cluster)
+```
+
+
+Below is a two-dimensional visualization of the two-cluster solution using PCAs. We see a similar separation to the k-means solution on the raw data in that the top 4/6 teams score higher on Component 1. 
+
+```{r}
+plot(pca$scores[,1:2],col=km.2pca$clust,pch=1,cex=1.5, lwd=2, 
+   main = "2-Cluster Solution on PCA", ylim = c(-3,3))
+text(pca$scores[,1:2],labels=EPL_Cluster$Team,col=km.2pca$clust, cex=.5,pos=3)
+```
+
+## 3D Plot
+
+Since 3D plots are cool, here are the 3 principal components colored by their respective k-means clusters. 
+
+```{r}
+plot3d(pca$scores)
+text3d(pca$scores, text = EPL_Cluster$Team, col = km.2pca$clust, cex=.5,pos=3)
+```
+
