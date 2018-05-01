@@ -18,7 +18,7 @@ EPL_aggregate <- read.csv("Clean Data/EPL_aggregate.csv")
 
 # Introduction
 
-Sports analysts and fans alike try to decipher what sets England's top teams apart from each other. What makes the elusive top 4/6 so far away from the rest? What about the relegation-threatened teams? Using k-means unsupervised learning, we will attempt to cluster teams based on season-total statistics from the 2016-2017 season to determine whether there are ways in which we can separate the top-performing teams from the rest of the pack. Similarly, we will try to see which teams are squeezing their way into the top 4/6. 
+Sports analysts and fans alike try to decipher what sets England's top teams apart from each other. What makes the elusive Top 4/6 so far away from the rest? What about the relegation-threatened teams? Using k-means unsupervised learning, we will attempt to cluster teams based on season-total statistics from the 2016-2017 season to determine whether there are ways in which we can separate the top-performing teams from the rest of the pack. Similarly, we will try to see which teams are squeezing their way into the Top 4/6. 
 
 # Data Preparation
 
@@ -146,7 +146,7 @@ Here we see two pretty well separated clusters. Most noteably, Cluster 2 contain
 
 For sanity, we compare the two cluster k-means solution with a complete hierarchical clustering solution. The cluster dendrogram shows two clear clusters.
 
-```{r hclust comparison}
+```{r hclust comparison, fig.width=6, fig.height=4}
 plot(hclust(dist(EPL_Cluster[,-(1:4)]),meth='complete'))
 comp.2 <- cutree(hclust(dist(EPL_Cluster[,-(1:4)]),meth='complete'),2)
 ```
