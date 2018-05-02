@@ -7,13 +7,14 @@ output: pdf_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(foreign)
 library(dplyr)
 require(mclust)
 library(NbClust)
 require(phyclust)
 library(cluster)
 library(rgl)
-EPL_aggregate <- read.csv("Clean Data/EPL_aggregate.csv")
+EPL_aggregate <- read.csv("C:/Users/Clare/Documents/EPL Data/Clean Data/EPL_aggregate.csv")
 ```
 
 # Introduction
@@ -135,7 +136,7 @@ It is important to note that Everton (Team 6) has a rather small silhouette widt
 To determine which dimensions best separate our clusters, we examine all bivariate plots.
 
 ```{r pairs plots}
-pairs(EPL_Cluster[,(1:4)])
+pairs(EPL_Cluster[,-(1:4)])
 ```
 
 ### 2D: Shots on Target vs. Shots on Target Conceded
