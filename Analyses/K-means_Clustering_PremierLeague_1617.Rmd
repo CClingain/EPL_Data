@@ -147,7 +147,7 @@ Next, we will plot the clusters on two dimensions: Shots on Target and Shots on 
 #Separate by ShotsTargetSum and ShotsTargetConSum
 plot(EPL_Cluster[,c(14,16)],col=km.2$clust,pch=1,cex=1.5, lwd=2, 
      xlab = "Shots on Target",ylab = "Shots on Target Conceded", 
-     main = "2-Cluster Solution",ylim =c(100,260))
+     main = "2-Cluster Solution",ylim =c(100,270),xlim = c(90,260))
 text(EPL_Cluster[,c(14,16)],labels=EPL_Cluster$Team,col=km.2$clust, cex=.5,pos=3)
 ```
 
@@ -155,16 +155,16 @@ Here we see two pretty well separated clusters. Most noteably, Cluster 2 contain
 
 ### 2D: Goals Against vs. Shots on Target
 
-Next, we consider separating the teams based on Goals Against vs. Shots on Target, as these two dimensions also seem promising in maximally separating our data. 
+Next, we consider separating the teams based on Goals Against vs. Shots on Target, as these two dimensions also seem promising in maximally separating our clusters. 
 
 ```{r plot 2, fig.width=6, fig.heigh=4}
 plot(EPL_Cluster[,c(8,14)],col=km.2$clust,pch=1,cex=1.5, lwd=2, 
      xlab = "Goals Against",ylab = "Shots on Target", 
-    main = "2-Cluster Solution",ylim =c(100,260))
+    main = "2-Cluster Solution",ylim =c(100,270),xlim=c(20,80))
 text(EPL_Cluster[,c(8,14)],labels=EPL_Cluster$Team,col=km.2$clust, cex=.5,pos=3)
 ```
 
-There is an even clearer distinction between the two clusters in these two dimensions. The black cluster (Top 4/6 teams) also apepars to be tighter. Interestingly, Middlesborough, Sunderland, and Hull - the three relegated teams -- are close toegether at the bottom of the red cluster.
+There is an even clearer distinction between the two clusters in these two dimensions. The black cluster (Top 4/6 teams) also appears to be tighter. Interestingly, Middlesborough, Sunderland, and Hull - the three relegated teams -- are close toegether at the bottom of the red cluster.
 
 ## Comparison to Hierarchical Clustering
 
@@ -259,11 +259,11 @@ pca$loadings
 
   -Main contributors: Shots Target, Shots Target Conceded, Shots, Shots Conceded, Goals, Goals        Conceded, Corners, Corners Conceded
   
-**Component 2: Agressive play (cannot distinguish if aggressive play is attacking or defending)**
+**Component 2: Aggressive play (cannot distinguish if aggressive play is attacking or defending)**
   
   -Main contributors: Yellow Card, Fouls Committed
   
-**Component 3: Mutual Agression**
+**Component 3: Mutual Aggression**
 
   -Main contributors: Red Card, Fouls Against
 
@@ -276,6 +276,10 @@ mds.3 <-cmdscale(dist(EPL_Cluster[,-(1:4)]),k=3)
 pairs(mds.3)
 plot(mds.3, ylim = c(-100,100), xlim = c(-250,275))
 text(mds.3, labels = EPL_Cluster$Team, col = km.2$clust, cex=.5,pos=3)
+
+#optional 3d plot
+plot3d(mds.3)
+text3d(mds.3, text = EPL_Cluster$Team, col = km.2$clust, cex=.7,pos=3)
 ```
 
 # Clustering on PCA
@@ -319,7 +323,7 @@ Below is a two-dimensional visualization of the two-cluster solution using PCAs.
 
 ```{r}
 plot(pca$scores[,1:2],col=km.2pca$clust,pch=1,cex=1.5, lwd=2, 
-   main = "2-Cluster Solution on PCA", ylim = c(-3,3))
+   main = "2-Cluster Solution on PCA", ylim = c(-3,3), xlim = c(-5,5.5))
 text(pca$scores[,1:2],labels=EPL_Cluster$Team,col=km.2pca$clust, cex=.5,pos=3)
 ```
 
@@ -329,6 +333,6 @@ Since 3D plots are cool, here are the 3 principal components colored by their re
 
 ```{r}
 plot3d(pca$scores)
-text3d(pca$scores, text = EPL_Cluster$Team, col = km.2pca$clust, cex=.5,pos=3)
+text3d(pca$scores, text = EPL_Cluster$Team, col = km.2pca$clust, cex=.7,pos=3)
 ```
 
