@@ -18,7 +18,7 @@ EPL_aggregate <- read.csv("Clean Data/EPL_aggregate.csv")
 
 # Introduction
 
-Sports analysts and fans alike try to decipher what sets England's top teams apart from each other. What makes the elusive Top 4/6 so far away from the rest? What about the relegation-threatened teams? Using k-means unsupervised learning, we will attempt to cluster teams based on season-total statistics from the 2016-2017 season to determine whether there are ways in which we can separate the top-performing teams from the rest of the pack. Similarly, we will try to see which teams are squeezing their way into the Top 4/6. 
+Sports analysts and fans alike try to decipher what sets England's top teams apart from each other. What makes the elusive Top 4/6 so far away from the rest? What about the relegation-threatened teams?Countless pundits and amateurs have proposed attack, defense, possession, set pieces. Using k-means unsupervised learning, multidimensional scaling, and principal comonponents analysis, we will attempt to cluster teams based on season-total statistics from the 2016-2017 season to determine whether there are ways in which we can separate the top-performing teams from the rest of the pack. Similarly, we will try to see which teams are squeezing their way into the Top 4/6. 
 
 # Data Preparation
 
@@ -126,9 +126,19 @@ plot(silhouette(km.2$clust, dist(EPL_Cluster[5:16])), main = "Silhouette Plot: 2
 
 The average silhouette width is 0.51, with Cluster 1 having a width of 0.47 and Cluster 2 having a width of 0.54. These widths suggest that our clusters are separated enough from each other such that the data points are well clustered. 
 
-It is important to note that Everton (Team 6) has a rather small silhouette width. Since it's width is not negative, which would suggest a mismatch, we will continue on with the analysis. 
+It is important to note that Everton (Team 6) has a rather small silhouette width. Since it's width is not negative, which would suggest a mismatch, we will continue on with the analysis. We acknowledge that some would spearate Everton into its own cluster, but we argue that it is difficult to gain much insight from a cluster of *n = 1* in this context.
 
 ## Plotting on Two Dimensions
+
+### Bivariate Plots
+
+To determine which dimensions best separate our clusters, we examine all bivariate plots.
+
+```{r pairs plots}
+pairs(EPL_Cluster[,(1:4)])
+```
+
+### 2D: Shots on Target vs. Shots on Target Conceded
 
 Next, we will plot the clusters on two dimensions: Shots on Target and Shots on Target Conceded. These two dimensions were chosen since they appear to spearate the data best out of all the pairs plots.
 
@@ -142,7 +152,20 @@ text(EPL_Cluster[,c(14,16)],labels=EPL_Cluster$Team,col=km.2$clust, cex=.5,pos=3
 
 Here we see two pretty well separated clusters. Most noteably, Cluster 2 contains the typical top4/6 teams - Liverpool, Chelsea, Manchester City, Tottenham, Manchester United, Arsenal - but also houses Southampton and Everton. 
 
-# Comparison to Hierarchical Clustering
+### 2D: Goals Against vs. Shots on Target
+
+Next, we consider separating the teams based on Goals Against vs. Shots on Target, as these two dimensions also seem promising in maximally separating our data. 
+
+```{r plot 2, fig.width=6, fig.heigh=4}
+plot(EPL_Cluster[,c(8,14)],col=km.2$clust,pch=1,cex=1.5, lwd=2, 
+     xlab = "Goals Against",ylab = "Shots on Target", 
+    main = "2-Cluster Solution",ylim =c(100,260))
+text(EPL_Cluster[,c(8,14)],labels=EPL_Cluster$Team,col=km.2$clust, cex=.5,pos=3)
+```
+
+There is an even clearer distinction between the two clusters in these two dimensions. The black cluster (Top 4/6 teams) also apepars to be tighter. Interestingly, Middlesborough, Sunderland, and Hull - the three relegated teams -- are close toegether at the bottom of the red cluster.
+
+## Comparison to Hierarchical Clustering
 
 For sanity, we compare the two cluster k-means solution with a complete hierarchical clustering solution. The cluster dendrogram shows two clear clusters.
 
@@ -163,7 +186,7 @@ For procedure's sake, we also check the Rand Index between the two solutions. We
 RRand(km.2$clust, comp.2)
 ```
 
-# Comparison to Multidimensional Scaling (MDS)
+## Comparison to Multidimensional Scaling (MDS)
 
 There are 12 possible dimensions which we can use to separate the 20 premier league teams from 16/17. In an effort to reduce the dimensionality, MDS with 2 dimensions was used. We end up with a similar plot to the k-means results, but with less separation between the two clusters. 
 
@@ -175,6 +198,10 @@ text(mds.2, labels = EPL_Cluster$Team, col = km.2$clust, cex=.5,pos=3)
 ```
 
 This solution is not as satisfying as the k-means solution, but still suggests that there exists such a distance between the top4/6 teams and the rest. In particular, we see that relegated Sunderland and Hull are the farthest from the top4/6 teams on the first dimension. In a way, we can argue that the first dimension may primarily be attacking. Similarly, Manchester United and Arsenal are some distance away from Liverpool, Manchester City, Tottenham, and Chelsea, all of whom finished in the top 4. 
+
+## Discussion
+
+It appears that there is a theme between the dimensions that best separate the two clusters: attack and defense. On one axis, we have attacking stats (Shots on Target), while on the other axis we have defending stats (Shots on Target Conceded; Goals Against). In both cases, the Top 4/6 teams rate high on both the attacking and defending dimensions, while the middling and relegation-threatened teams tend to rate poorly in terms of defensive, and range from poor to moderate in terms of attack. Many would argue that this supports the classic theory that a strong football team requires both a vibrant attack and a solid defense. However, we note that due to the nature of the data, there is a strong correlation between some of the variables. Therefore, it may be redundant to have 12 dimensions that cover similar latent concepts. To circumvent this issue, we standardize our data, and then perform principal components analysis in the following section.
 
 # Principal Components Analysis (PCA)
 
@@ -218,6 +245,8 @@ text3d(pca$scores[,1:3], text=EPL_Cluster$Team, cex=.5)
 ```
 
 ## Defining the components
+
+We now examine the factor loadings on the first three principal components. Our interpretation is subjective, and we acknowledge that others may attribute a different name or concept to each princiapl component.
 
 ```{r defining pca}
 pca$loadings
