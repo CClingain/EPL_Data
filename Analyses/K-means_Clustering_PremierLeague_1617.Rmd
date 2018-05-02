@@ -19,7 +19,7 @@ EPL_aggregate <- read.csv("C:/Users/Clare/Documents/EPL Data/Clean Data/EPL_aggr
 
 # Introduction
 
-Sports analysts and fans alike try to decipher what sets England's top teams apart from each other. What makes the elusive Top 4/6 so far away from the rest? What about the relegation-threatened teams?Countless pundits and amateurs have proposed attack, defense, possession, set pieces. Using k-means unsupervised learning, multidimensional scaling, and principal comonponents analysis, we will attempt to cluster teams based on season-total statistics from the 2016-2017 season to determine whether there are ways in which we can separate the top-performing teams from the rest of the pack. Similarly, we will try to see which teams are squeezing their way into the Top 4/6. 
+Sports analysts and fans alike try to decipher what sets England's top teams apart from each other. What makes the elusive Top 4/6 so far away from the rest? What about the relegation-threatened teams? Countless pundits and amateurs have proposed attack, defense, possession, set pieces. Using k-means unsupervised learning, multidimensional scaling, and principal components analysis, we will attempt to cluster teams based on season-total statistics from the 2016-2017 season to determine whether there are ways in which we can separate the top-performing teams from the rest of the pack. Similarly, we will try to see which teams are squeezing their way into the Top 4/6. 
 
 # Data Preparation
 
