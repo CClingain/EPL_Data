@@ -14,6 +14,7 @@ library(NbClust)
 require(phyclust)
 library(cluster)
 library(rgl)
+library(e1071)
 EPL_aggregate <- read.csv("C:/Users/Clare/Documents/EPL Data/Clean Data/EPL_aggregate.csv")
 ```
 
@@ -136,7 +137,7 @@ It is important to note that Everton (Team 6) has a rather small silhouette widt
 To determine which dimensions best separate our clusters, we examine all bivariate plots.
 
 ```{r pairs plots}
-pairs(EPL_Cluster[,-(1:4)])
+pairs(EPL_Cluster[,-(1:4)], col = km.2$cluster)
 ```
 
 ### 2D: Shots on Target vs. Shots on Target Conceded
@@ -164,7 +165,25 @@ plot(EPL_Cluster[,c(8,14)],col=km.2$clust,pch=1,cex=1.5, lwd=2,
 text(EPL_Cluster[,c(8,14)],labels=EPL_Cluster$Team,col=km.2$clust, cex=.5,pos=3)
 ```
 
-There is an even clearer distinction between the two clusters in these two dimensions. The black cluster (Top 4/6 teams) also appears to be tighter. Interestingly, Middlesborough, Sunderland, and Hull - the three relegated teams -- are close toegether at the bottom of the red cluster.
+There is an even clearer distinction between the two clusters in these two dimensions. The black cluster (Top 4/6 teams) also appears to be tighter. Interestingly, Middlesborough, Sunderland, and Hull - the three relegated teams -- are close together at the bottom of the red cluster.
+
+## 2D: Shots Conceded vs. Shots on Target Conceded
+
+```{r}
+plot(EPL_Cluster[,c(15,16)],col=km.2$clust,pch=1,cex=1.5, lwd=2, 
+    xlab = "Shots Conceded",ylab = "Shots on Target Conceded", 
+    main = "2-Cluster Solution",ylim = c(100,260),xlim = c(290,700))
+text(EPL_Cluster[,c(15,16)],labels=EPL_Cluster$Team,col=km.2$clust, cex=.5,pos=3)
+```
+
+## 2D: Shots vs Goals Against
+
+```{r}
+plot(EPL_Cluster[,c(13,8)],col=km.2$clust,pch=1,cex=1.5, lwd=2, 
+     xlab = "Shots",ylab = "Goals Against", 
+     main = "2-Cluster Solution", ylim = c(20,85),xlim = c(330,680))
+text(EPL_Cluster[,c(13,8)],labels=EPL_Cluster$Team,col=km.2$clust, cex=.5,pos=3)
+```
 
 ## Comparison to Hierarchical Clustering
 
@@ -334,5 +353,21 @@ Since 3D plots are cool, here are the 3 principal components colored by their re
 ```{r}
 plot3d(pca$scores)
 text3d(pca$scores, text = EPL_Cluster$Team, col = km.2pca$clust, cex=.7,pos=3)
+```
+
+## SVM
+
+```{r}
+EPL_Cluster_std$ClusterLabel <- km.2$cluster
+#table(EPL_Cluster$ClusterLabel,EPL_Cluster$Team) it works
+svm <- svm(ClusterLabel ~., data = EPL_Cluster_std[,-(1:4)], type = "C-classification", kernel = "linear")
+w <- t(svm$coefs) %*% svm$SV
+b <- -svm$rho
+plot(EPL_Cluster_std[,-(1:4)],col=km.2$cluster, pch=19); abline(h=0,v=0,lty=3)
+points(EPL_Cluster_std[svm$index,c(1,2)],col="blue",cex=2) # show the support vectors
+
+abline(a=-b/w[1,2], b=-w[1,1]/w[1,2], col="blue", lty=3)
+sepLinePlot(svm.lin,EPL_Cluster_std)
+
 ```
 
