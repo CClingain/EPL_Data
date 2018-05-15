@@ -36,7 +36,7 @@ AllLeague  <- AllLeague %>% filter(Week==38) %>% group_by(Team) %>%
   mutate(CornersConcededSum = sum(Corners_Conceded)) %>% 
   mutate(ShotsSum = sum(Shots_Taken)) %>%
   mutate(ShotsTargetSum = sum(Shots_on_Target)) %>%
-  mutate(ShotsCondededSum = sum(Shots_Conceded)) %>% 
+  mutate(ShotsConcededSum = sum(Shots_Conceded)) %>% 
   mutate(ShotsTargetConSum = sum(Shots_on_Target_Conceded))
 
 AllLeague <- AllLeague[c(1:4, 27:38)]
