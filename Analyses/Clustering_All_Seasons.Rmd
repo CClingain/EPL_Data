@@ -39,7 +39,7 @@ AllLeague  <- AllLeague %>% filter(Week==38) %>% group_by(Team) %>%
   mutate(ShotsConcededSum = sum(Shots_Conceded)) %>% 
   mutate(ShotsTargetConSum = sum(Shots_on_Target_Conceded))
 
-AllLeague <- AllLeague[c(1:4, 27:38)]
+AllLeague <- AllLeague[c(1:4,31:42)]
 ```
 
 ##Standardize the data
@@ -63,7 +63,7 @@ screeplot(pca,type="l", main = "Screeplot of PCA")
 eigen(cor(AllLeague_std[,-(1:4)]))$values 
 
 ```
-5 of them are greater than 1. Seems safer to go with 4 components. 
+4 of them are greater than 1. Seems safer to go with 3 components. 
 
 ##Loadings
 
