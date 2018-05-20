@@ -156,3 +156,32 @@ Does not run because of small sample.
 
 ##Apply to all teams
 
+Clearly, it's not a good idea to cluster when you only have 6 teams. But if we take these components as what makes these never-relegated-in-the-Premier-League-Teams so solid, and apply them to the teams over the seasons, perhaps it will bring some interesting findings to light. 
+
+```{r}
+comp1 <- (YellowCardSum*0) + (RedCardSum*0) + (GoalsSum*(-0.312)) + (GoalsAgainstSum*0.388) + (FoulsSum*(-0.178)) + (FoulsAgainstSum*0.102) + (CornersSum*(-0.169)) + (CornersConcededSum*0.404) + (ShotsSum*(-0.352)) + (ShotsTargetSum*(-0.179)) + (ShotsConcededSum*0.438) + (ShotsTargetConSum*0.409)
+
+comp2 <- (YellowCardSum*0.328) + (RedCardSum*(-0.143)) + (GoalsSum*(-0.327)) + (GoalsAgainstSum*0) + (FoulsSum*(0.392)) + (FoulsAgainstSum*(-0.411)) + (CornersSum*(0.397)) + (CornersConcededSum*0) + (ShotsSum*(0.256)) + (ShotsTargetSum*(-0.450)) + (ShotsConcededSum*0) + (ShotsTargetConSum*0.104)
+
+comp3 <- (YellowCardSum*0.529) + (RedCardSum*(0.576)) + (GoalsSum*(0.120)) + (GoalsAgainstSum*(-0.261)) + (FoulsSum*(0.323)) + (FoulsAgainstSum*(0.226)) + (CornersSum*(-0.135)) + (CornersConcededSum*0.278) + (ShotsSum*(-0.151)) + (ShotsTargetSum*(0)) + (ShotsConcededSum*0) + (ShotsTargetConSum*(-0.177))
+```
+
+```{r}
+Cluster.15.16 <- EPL_aggregate %>% filter(Season=="15/16") %>% group_by(Team) %>%
+  mutate(YellowCardSum = sum(Yellow_Cards))
+
+Cluster.15.16 <- Cluster.15.16 %>% mutate(RedCardSum = sum(Red_Cards)) %>% 
+  mutate(GoalsSum = sum(Goals_Scored)) %>%
+  mutate(GoalsAgainstSum = sum(Goals_Conceded)) %>% 
+  mutate(FoulsSum = sum(Fouls_Committed)) %>% 
+  mutate(FoulsAgainstSum = sum(Fouls_Against)) %>%
+  mutate(CornersSum = sum(Corners)) %>% 
+  mutate(CornersConcededSum = sum(Corners_Conceded)) %>% 
+  mutate(ShotsSum = sum(Shots_Taken)) %>%
+  mutate(ShotsTargetSum = sum(Shots_on_Target)) %>%
+  mutate(ShotsCondededSum = sum(Shots_Conceded)) %>% 
+  mutate(ShotsTargetConSum = sum(Shots_on_Target_Conceded))
+Cluster.15.16 <- Cluster.15.16 %>% filter(Week==38)
+Cluster.15.16  <- Cluster.15.16[c(1:4, 31:42)]
+```
+
