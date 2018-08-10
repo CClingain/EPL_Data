@@ -107,6 +107,23 @@ mydata <- mydata %>%
             mutate(position = coalesce(RightWinger, LeftBack,LeftWinger,CentreBack,CentreForward,AttackingMidfield,RightBack,DefensiveMidfield,CentralMidfield, LeftWinger, GoalKeeper, SecondStriker, LeftMidfield, RightMidfield))
 # Remove the intermediate columns
 mydata2 <- mydata[,c(1,15)]
+
+#Remove the instances of these positions
+mydata2 <- mydata2 %>% mutate(player = str_remove(player, "Right Winger")) %>%
+mutate(player = str_remove(player, "Left-Back")) %>%
+mutate(player = str_remove(player, "LeftWinger")) %>%
+mutate(player = str_remove(player, "Centre-Back")) %>%
+mutate(player = str_remove(player, "Centre-Forward")) %>%
+mutate(player = str_remove(player, "Attacking Midfield")) %>%
+mutate(player = str_remove(player, "Right-Back")) %>%
+mutate(player = str_remove(player, "Defensive Midfield")) %>%
+mutate(player = str_remove(player, "Central Midfield")) %>%
+mutate(player = str_remove(player, "Left Winger")) %>%
+mutate(player = str_remove(player, "Goalkeeper")) %>%
+mutate(player = str_remove(player, "Second Striker")) %>%
+mutate(player = str_remove(player, "Left Midfield")) %>%
+mutate(player = str_remove(player, "Right Midfield"))
+
 ```
 
 ## Extract Season
@@ -121,10 +138,79 @@ mydata2$player <-  str_remove(mydata2$player,"[0-9][0-9]/[0-9][0-9]")
 
 ## Extract fee + market value
 
+We're not really interested in using this part of the data, so this solution may seem a bit unsatisfactory to those who are interested. This doesn't capture the players who had a market value of less than £1,000,000. These can be recovered and updated. Some players ended up leaving on a free transfer, and therefore end up having both fee and market value equal to the same number. 
+
 ```{r}
  str_extract(mydata2$player,"£[0-9]+[a-z]+") # test
  str_extract(mydata2$player,"£[0-9]+\\.[0-9]+[a-z]+") # market value
  str_extract_all(mydata2$player,"£[0-9]+\\.[0-9]+[a-z]+") # market value and fee
 
+ 
+ 
+ temp2 <-  str_extract_all(mydata2$player,"£[0-9]+\\.[0-9]+[a-z]+")
+ temp3 <- do.call(rbind,temp2)
+ 
+ mydata3 <- mydata2 %>% 
+              mutate(marketvalue = temp3[,1]) %>%
+              mutate(fee = temp3[,2])
+ # Remove the fee information from the first column
+ mydata3 <- mydata3 %>% mutate(player = str_remove_all(mydata2$player,"£[0-9]+\\.[0-9]+[a-z]+"))
+ mydata3 <- mydata3 %>%mutate(player = str_remove_all(mydata3$player,"£"))
 ```
 
+## Remove Row Number
+
+```{r}
+mydata3 <- mydata3 %>% mutate(player = str_remove(mydata3$player, "[0-9]+"))
+```
+
+
+## Extract the Transfer date
+
+```{r}
+mydata3 <- mydata3 %>% 
+ mutate(date = str_extract(mydata3$player,"[A-z][a-z]+[:space:][0-9]+\\,[:space:][0-9]+")) %>% mutate(player = str_remove(mydata3$player,"[A-z][a-z]+[:space:][0-9]+\\,[:space:][0-9]+"))
+```
+
+## Extract Player's Age
+
+```{r}
+mydata3 <- mydata3 %>% mutate(age = str_extract(mydata3$player,"[0-9]+")) %>%
+  mutate(player = str_remove(mydata3$player, "[0-9]+"))
+```
+
+## Replace Accented Letters
+
+```{r}
+mydata3 <- mydata3 %>% mutate(player = str_replace_all(mydata3$player,"Á","A"))
+mydata3 <- mydata3 %>% mutate(player = str_replace_all(mydata3$player,"á","a"))
+mydata3 <- mydata3 %>% mutate(player = str_replace_all(mydata3$player,"í","i"))
+mydata3 <- mydata3 %>% mutate(player = str_replace_all(mydata3$player,"é","e"))
+mydata3 <- mydata3 %>% mutate(player = str_replace_all(mydata3$player,"É","E"))
+mydata3 <- mydata3 %>% mutate(player = str_replace_all(mydata3$player,"ü","u"))
+mydata3 <- mydata3 %>% mutate(player = str_replace_all(mydata3$player,"ã","a"))
+mydata3 <- mydata3 %>% mutate(player = str_replace_all(mydata3$player,"ú","u"))
+mydata3 <- mydata3 %>% mutate(player = str_replace_all(mydata3$player,"ö","o"))
+mydata3 <- mydata3 %>% mutate(player = str_replace_all(mydata3$player,"Ö","O"))
+mydata3 <- mydata3 %>% mutate(player = str_replace_all(mydata3$player,"ó","o"))
+mydata3 <- mydata3 %>% mutate(player = str_replace_all(mydata3$player,"è","e"))
+mydata3 <- mydata3 %>% mutate(player = str_replace_all(mydata3$player,"ë","e"))
+mydata3 <- mydata3 %>% mutate(player = str_replace_all(mydata3$player,"ï","i"))
+mydata3 <- mydata3 %>% mutate(player = str_replace_all(mydata3$player,"ñ","n"))
+
+```
+
+# Extract the League (to and from)
+
+```{r}
+league <- str_extract_all(mydata3$player, "Ligue 1|Premier League|Serie A|LaLiga|La Liga|Bundesliga|Liga NOS|Eredivisie|Super Lig|Premier Liga|LynTippeligaen|Vyshcha Liga|Super League|Championship|Premiership|Jupiler Pro League|PTT Telecomp|Argentina|HNL|Primera Division|SuperLiga|Scotland|Serie B|Superligaen Championship|Superligaen|Croatia|Uruguay|Qatar|Liga MX Clausura|Brazil|B2ª B - Grupo III|Liga 1|Ligue 2|Without Club|Torneo Final")
+league2 <- do.call(rbind,league)
+mydata4 <- mydata3 %>% mutate(LeagueFrom = league2[,1]) %>%
+  mutate(LeagueTo = league2[,2]) %>% mutate(player = str_remove_all(mydata3$player,"Ligue 1|Premier League|Serie A|LaLiga|La Liga|Bundesliga|Liga NOS|Eredivisie|Super Lig|Premier Liga|LynTippeligaen|Vyshcha Liga|Super League|Championship|Premiership|Jupiler Pro League|PTT Telecomp|Argentina|HNL|Primera Division|SuperLiga|Scotland|Serie B|Superligaen Championship|Superligaen|Croatia|Uruguay|Qatar|Liga MX Clausura|Brazil|B2ª B - Grupo III|Liga 1|Ligue 2|Without Club|Torneo Final" ))
+```
+
+# Extract Name and Team
+
+```{r}
+temp <- str_extract_all(mydata4$player,"[A-Z]+[a-z]+")
+```
