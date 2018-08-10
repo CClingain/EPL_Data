@@ -187,4 +187,7 @@ mydata4$player <- str_replace_all(mydata4$player,"[:punct:]|[0-9]|[0-9]+[a-z]|[0
 
 
 temp <- str_extract_all(mydata4$player,"[A-Z]+[a-z]+")
+
+
+teams <- str_extract_all(mydata4$player, "Liverpool|Man City|Man Utd|AC Milan|AS Roma|Monaco|Real Madrid|Stoke City|Athletic|Bor Dortmund|Bor Mgladbach|AFC Ajax|FC Barcelona|Villareal CF|Schalke|Inter Milan|Inter|PSV Eindhoven|Fiorentina|Chelsea|Arsenal|Tottenham Hotspurs|Spurs|Palmeiras|LOSC Lille|Lille|Lazio|West Ham|Marseille|Everton|Bay Leverkusen|Benfica|Atletico Madrid|Bayern Munich|Sporting CP|Swansea|Zenit SPb|Besiktas|Anzhi|Southampton|FC Porto|SC Frieberg|Olympique Lyon|Sevilla FC|La Coruna|Newcastle|FK|FC Ausburg|AZ Alkmaar|Brighton|Birmingham|FC Basel|Dynamo Kyiv|Feyenoord|Crystal Palace")
 ```
