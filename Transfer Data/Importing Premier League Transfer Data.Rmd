@@ -1,0 +1,83 @@
+---
+title: "Premier League Transfer Data"
+author: "Clare Clingain"
+date: "August 10, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(rvest)
+library(dplyr)
+```
+
+
+```{r}
+url <- read_html('https://www.transfermarkt.co.uk/premier-league/neuimland/wettbewerb/GB1/saison_id/alle/land_id/alle/ausrichtung//spielerposition_id/alle/altersklasse//w_s//plus/1')
+```
+
+```{r}
+url %>%
+  html_nodes(".page") %>%
+  html_text() %>%
+  as.numeric()
+```
+There are two classes we need -- odd and even.
+
+```{r}
+oddrows <- read_html(url) %>%
+  html_nodes(".odd") %>%
+  html_text() 
+
+evenrows <- read_html(url) %>%
+  html_nodes(".even") %>%
+  html_text()
+```
+
+We know there are 21 pages that follow this sort of url: https://www.transfermarkt.co.uk/premier-league/neuimland/wettbewerb/GB1/ajax/yw1/saison_id/alle/land_id/alle/ausrichtung//spielerposition_id/alle/altersklasse//w_s//plus/page/1//page/14
+
+Let's loop through each page to get the data.
+
+```{r}
+# Get the URLS
+urls <- NULL
+for (i in 1:21){
+  urls[i] <- paste0('https://www.transfermarkt.co.uk/premier-league/neuimland/wettbewerb/GB1/saison_id/alle/land_id/alle/ausrichtung//spielerposition_id/alle/altersklasse//w_s//plus/page/1//page/',i, sep = "")
+  }
+```
+
+We will get the odd and even row separately since they are under different nodes.
+
+```{r}
+getodddata <- function(url) {
+oddrows <- read_html(url) %>% 
+  html_nodes(".odd") %>% 
+  html_text() %>% 
+  gsub('[\r\n\t]', ' ', .)
+}
+
+getevendata <- function(url) {
+  evenrows <- read_html(url) %>% 
+    html_nodes(".even") %>% 
+    html_text() %>% 
+    gsub('[\r\n\t]', ' ', .)
+}
+
+myodddata <- lapply(urls,getodddata)
+myevendata <- lapply(urls, getevendata)
+```
+
+Next, we will combine the data so it'll be easier to parse afterwards as a whole.
+
+```{r}
+mydata1 <- do.call(c,myevendata)
+mydata2 <- do.call(c,myodddata)
+mydata <- as.data.frame(c(mydata1,mydata2), stringsAsFactors = F)
+```
+
+Now that we have a data frame set up, we can start to declutter the text into meaningful columns of data.
+
+```{r}
+
+```
+
