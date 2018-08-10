@@ -9,6 +9,8 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 library(rvest)
 library(dplyr)
+library(tidyr)
+library(stringr)
 ```
 
 
@@ -53,14 +55,14 @@ getodddata <- function(url) {
 oddrows <- read_html(url) %>% 
   html_nodes(".odd") %>% 
   html_text() %>% 
-  gsub('[\r\n\t]', ' ', .)
+  gsub('[\r\n\t]', '', .)
 }
 
 getevendata <- function(url) {
   evenrows <- read_html(url) %>% 
     html_nodes(".even") %>% 
     html_text() %>% 
-    gsub('[\r\n\t]', ' ', .)
+    gsub('[\r\n\t]', '', .)
 }
 
 myodddata <- lapply(urls,getodddata)
@@ -73,11 +75,33 @@ Next, we will combine the data so it'll be easier to parse afterwards as a whole
 mydata1 <- do.call(c,myevendata)
 mydata2 <- do.call(c,myodddata)
 mydata <- as.data.frame(c(mydata1,mydata2), stringsAsFactors = F)
+colnames(mydata) <- "Player"
 ```
 
 Now that we have a data frame set up, we can start to declutter the text into meaningful columns of data.
 
 ```{r}
+positions <- c("Right Winger","Left-Back","Left Winger", "Centre-Back","Centre-Forward","Attacking Midfield","Right-Back","Defensive Midfield","Central Midfield", "Left Winger", "GoalKeeper","Second Striker","Left Midfield","Right Midfield")
 
+mydata <- mydata %>%
+            mutate(RightWinger = str_extract(mydata$Player, "Right Winger")) %>%
+            mutate(LeftBack = str_extract(mydata$Player,"Left-Back")) %>%
+            mutate(LeftWinger = str_extract(mydata$Player,"LeftWinger")) %>%
+            mutate(CentreBack = str_extract(mydata$Player,"Centre-Back")) %>%
+            mutate(CentreForward = str_extract(mydata$Player,"Centre-Forward")) %>%
+            mutate(AttackingMidfield = str_extract(mydata$Player,"Attacking Midfield")) %>%
+            mutate(RightBack = str_extract(mydata$Player,"Right-Back")) %>%
+            mutate(DefensiveMidfield = str_extract(mydata$Player,"Defensive Midfield")) %>%
+            mutate(CentralMidfield = str_extract(mydata$Player,"Central Midfield")) %>%
+            mutate(LeftWinger = str_extract(mydata$Player, "Left Winger")) %>%
+            mutate(GoalKeeper = str_extract(mydata$Player, "Goalkeeper")) %>%
+            mutate(SecondStriker = str_extract(mydata$Player,"Second Striker")) %>%
+            mutate(LeftMidfield = str_extract(mydata$Player,"Left Midfield")) %>%
+            mutate(RightMidfield = str_extract(mydata$Player,"Right Midfield"))
+# Combine the position columns
+mydata <- mydata %>%
+            mutate(position = coalesce(RightWinger, LeftBack,LeftWinger,CentreBack,CentreForward,AttackingMidfield,RightBack,DefensiveMidfield,CentralMidfield, LeftWinger, GoalKeeper, SecondStriker, LeftMidfield, RightMidfield))
+# Remove the intermediate columns
+mydata2 <- mydata[,c(1,15)]
 ```
 
