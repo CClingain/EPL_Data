@@ -88,41 +88,11 @@ Now that we have a data frame set up, we can start to declutter the text into me
 positions <- c("Right Winger","Left-Back","Left Winger", "Centre-Back","Centre-Forward","Attacking Midfield","Right-Back","Defensive Midfield","Central Midfield", "Left Winger", "GoalKeeper","Second Striker","Left Midfield","Right Midfield")
 
 mydata <- mydata %>%
-            mutate(RightWinger = str_extract(mydata$player, "Right Winger")) %>%
-            mutate(LeftBack = str_extract(mydata$player,"Left-Back")) %>%
-            mutate(LeftWinger = str_extract(mydata$player,"LeftWinger")) %>%
-            mutate(CentreBack = str_extract(mydata$player,"Centre-Back")) %>%
-            mutate(CentreForward = str_extract(mydata$player,"Centre-Forward")) %>%
-            mutate(AttackingMidfield = str_extract(mydata$player,"Attacking Midfield")) %>%
-            mutate(RightBack = str_extract(mydata$player,"Right-Back")) %>%
-            mutate(DefensiveMidfield = str_extract(mydata$player,"Defensive Midfield")) %>%
-            mutate(CentralMidfield = str_extract(mydata$player,"Central Midfield")) %>%
-            mutate(LeftWinger = str_extract(mydata$player, "Left Winger")) %>%
-            mutate(GoalKeeper = str_extract(mydata$player, "Goalkeeper")) %>%
-            mutate(SecondStriker = str_extract(mydata$player,"Second Striker")) %>%
-            mutate(LeftMidfield = str_extract(mydata$player,"Left Midfield")) %>%
-            mutate(RightMidfield = str_extract(mydata$player,"Right Midfield"))
-# Combine the position columns
-mydata <- mydata %>%
-            mutate(position = coalesce(RightWinger, LeftBack,LeftWinger,CentreBack,CentreForward,AttackingMidfield,RightBack,DefensiveMidfield,CentralMidfield, LeftWinger, GoalKeeper, SecondStriker, LeftMidfield, RightMidfield))
-# Remove the intermediate columns
-mydata2 <- mydata[,c(1,15)]
+            mutate(position = str_extract(mydata$player, "Right Winger|Left-Back|LeftWinger|Centre-Back|Centre-Forward|Attacking Midfield|Right-Back|Defensive Midfield|Central Midfield|Left Winger|Goalkeeper|Second Striker|Left Midfield|Right Midfield"))
+
 
 #Remove the instances of these positions
-mydata2 <- mydata2 %>% mutate(player = str_remove(player, "Right Winger")) %>%
-mutate(player = str_remove(player, "Left-Back")) %>%
-mutate(player = str_remove(player, "LeftWinger")) %>%
-mutate(player = str_remove(player, "Centre-Back")) %>%
-mutate(player = str_remove(player, "Centre-Forward")) %>%
-mutate(player = str_remove(player, "Attacking Midfield")) %>%
-mutate(player = str_remove(player, "Right-Back")) %>%
-mutate(player = str_remove(player, "Defensive Midfield")) %>%
-mutate(player = str_remove(player, "Central Midfield")) %>%
-mutate(player = str_remove(player, "Left Winger")) %>%
-mutate(player = str_remove(player, "Goalkeeper")) %>%
-mutate(player = str_remove(player, "Second Striker")) %>%
-mutate(player = str_remove(player, "Left Midfield")) %>%
-mutate(player = str_remove(player, "Right Midfield"))
+mydata2 <- mydata %>% mutate(player = str_remove(mydata$player, "Right Winger|Left-Back|LeftWinger|Centre-Back|Centre-Forward|Attacking Midfield|Right-Back|Defensive Midfield|Central Midfield|Left Winger|Goalkeeper|Second Striker|Left Midfield|Right Midfield")) 
 
 ```
 
@@ -141,9 +111,9 @@ mydata2$player <-  str_remove(mydata2$player,"[0-9][0-9]/[0-9][0-9]")
 We're not really interested in using this part of the data, so this solution may seem a bit unsatisfactory to those who are interested. This doesn't capture the players who had a market value of less than £1,000,000. These can be recovered and updated. Some players ended up leaving on a free transfer, and therefore end up having both fee and market value equal to the same number. 
 
 ```{r}
- str_extract(mydata2$player,"£[0-9]+[a-z]+") # test
- str_extract(mydata2$player,"£[0-9]+\\.[0-9]+[a-z]+") # market value
- str_extract_all(mydata2$player,"£[0-9]+\\.[0-9]+[a-z]+") # market value and fee
+ #str_extract(mydata2$player,"£[0-9]+[a-z]+") # test
+ #str_extract(mydata2$player,"£[0-9]+\\.[0-9]+[a-z]+") # market value
+ #str_extract_all(mydata2$player,"£[0-9]+\\.[0-9]+[a-z]+") # market value and fee
 
  
  
@@ -212,5 +182,9 @@ mydata4 <- mydata3 %>% mutate(LeagueFrom = league2[,1]) %>%
 # Extract Name and Team
 
 ```{r}
+# Clean up data a little more
+mydata4$player <- str_replace_all(mydata4$player,"[:punct:]|[0-9]|[0-9]+[a-z]|[0-9]|Loan fee|fee|<U+200E>","")
+
+
 temp <- str_extract_all(mydata4$player,"[A-Z]+[a-z]+")
 ```
