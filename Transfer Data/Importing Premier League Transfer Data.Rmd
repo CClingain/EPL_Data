@@ -167,6 +167,7 @@ mydata3 <- mydata3 %>% mutate(player = str_replace_all(mydata3$player,"è","e"))
 mydata3 <- mydata3 %>% mutate(player = str_replace_all(mydata3$player,"ë","e"))
 mydata3 <- mydata3 %>% mutate(player = str_replace_all(mydata3$player,"ï","i"))
 mydata3 <- mydata3 %>% mutate(player = str_replace_all(mydata3$player,"ñ","n"))
+mydata3 <- mydata3 %>% mutate(player = str_replace_all(mydata3$player,"ê","e"))
 
 ```
 
@@ -183,11 +184,41 @@ mydata4 <- mydata3 %>% mutate(LeagueFrom = league2[,1]) %>%
 
 ```{r}
 # Clean up data a little more
-mydata4$player <- str_replace_all(mydata4$player,"[:punct:]|[0-9]|[0-9]+[a-z]|[0-9]|Loan fee|fee|<U+200E>","")
+mydata4$player <- str_replace_all(mydata4$player,"[:punct:]|[0-9]|[0-9]+[a-z]|[0-9]|Loan fee|fee|<U+200E>|£[0-9]+[a-z]+|Loan|KPN|Free Transfer|Swap deal","")
 
 
 temp <- str_extract_all(mydata4$player,"[A-Z]+[a-z]+")
 
 
-teams <- str_extract_all(mydata4$player, "Liverpool|Man City|Man Utd|AC Milan|AS Roma|Monaco|Real Madrid|Stoke City|Athletic|Bor Dortmund|Bor Mgladbach|AFC Ajax|FC Barcelona|Villareal CF|Schalke|Inter Milan|Inter|PSV Eindhoven|Fiorentina|Chelsea|Arsenal|Tottenham Hotspurs|Spurs|Palmeiras|LOSC Lille|Lille|Lazio|West Ham|Marseille|Everton|Bay Leverkusen|Benfica|Atletico Madrid|Bayern Munich|Sporting CP|Swansea|Zenit SPb|Besiktas|Anzhi|Southampton|FC Porto|SC Frieberg|Olympique Lyon|Sevilla FC|La Coruna|Newcastle|FK|FC Ausburg|AZ Alkmaar|Brighton|Birmingham|FC Basel|Dynamo Kyiv|Feyenoord|Crystal Palace")
+teams <- str_extract_all(mydata4$player, "Liverpool|Man City|Man Utd|AC Milan|AS Roma|Monaco|Real Madrid|Stoke City|Athletic|Bor Dortmund|Bor Mgladbach|AFC Ajax|FC Barcelona|Villareal CF|FC Schalke|Inter Milan|Inter|PSV Eindhoven|Fiorentina|Chelsea|Arsenal|Tottenham Hotspurs|Spurs|Palmeiras|LOSC Lille|Lille|Lazio|West Ham|Marseille|Everton|Bay Leverkusen|Benfica|Atletico Madrid|Bayern Munich|Sporting CP|Swansea|Zenit SPb|Besiktas|Anzhi|Southampton|FC Porto|SC Freiburg|Olympique Lyon|Sevilla FC|Dep La Coruna|La Coruna|Newcastle|FK|FC Augsburg|AZ Alkmaar|Brighton|Birmingham|FC Basel|Dynamo Kyiv|Feyenoord|Crystal Palace|Celta de Vigo|KRC Genk|Leicester|Torino|Spartak Moscow|RSC Anderlecht|Wolves|West Brom|Juventus|Galatasaray|Stade Rennais|Sunderland|Celtic|Bologna|G Bordeaux|QPR|Lens|Club Brugge|Hamburger SV|SaintEtienne|Dinamo Zagreb|River Plate|Aston Villa|FC Twente|Montpellier|Reggina|Werder Bremen|Shakhtar D|AJ Auxerre|Partizan|Loko Moscow|Fulham|Vasco da Gama|Fenerbahce|Middlesbrough|Norwich|Cardiff|Rangers|OGC Nice|Ternana|Blackburn|Udinese Calcio|Udinese|Watford|Portsmouth|Atalanta|Malaga CF|RB Leipzig|FC Nantes|Gremio|SSC Napoli|Internacional|Chievo Verona|Vitesse|Leeds|TSG Hoffenheim|VfL Wolfsburg|Guimaraes|Brondby IF|FC Copenhagen|Espanyol|Standard Liege|Dynamo Kyiv|Heerenveen|Maldonado|KAS Eupen|Real Sociedad|Hertha BSC|FC Midtjylland round|Al Sadd|Red Star|Anzhi|Paris SG|RB Salzburg|FC Koln|FC Lorient|CSKA Moscow|AC Parma|Heerenveen|Olympiacos|CF Pachuca|Corinthians|Estudiantes|Toulouse|UD Las Palmas|FC Empoli|CD Leganes|Bournemouth|Independiente|Heart of Midl|RCD Mallorca|FSV Mainz|Bolton|Huddersfield|Maldonado|Steaua Bukarest|SM Caen|HNK Rijeka|KAA Gent|Brescia|Sampdoria|Fluminense|CS Sedan|FC Sao Paulo B |Wigan|Villarreal CF|Valencia CF|Hull City|VfB Stuttgart|Hajduk Split|Nacional|Levante UD|Dinamo Moscow|Granada CF|US Palermo|Santos FC|Bristol City|AtleticoPR|Burnley|Chivas")
+
+#491 Victor Valdes Without Club
+teams[[491]] <- c("Without Club","Man Utd")
+#391 Jermaine Lens last named picked up as club
+teams[[391]] <- c("Dynamo Kyiv","Sunderland")
+# Will fix these manually
+
+# Make into dataframe
+teamscols <- do.call(rbind, teams)
+mydatafinal <- mydata4 %>% mutate(clubfrom = teamscols[,1]) %>%
+  mutate(clubto = teamscols[,2])
 ```
+
+## Clean Up Names Column
+
+```{r}
+mydatafinal$player <- str_remove_all(mydatafinal$player, "Liverpool|Man City|Man Utd|AC Milan|AS Roma|Monaco|Real Madrid|Stoke City|Athletic|Bor Dortmund|Bor Mgladbach|AFC Ajax|FC Barcelona|Villareal CF|FC Schalke|Inter Milan|Inter|PSV Eindhoven|Fiorentina|Chelsea|Arsenal|Tottenham Hotspurs|Spurs|Palmeiras|LOSC Lille|Lille|Lazio|West Ham|Marseille|Everton|Bay Leverkusen|Benfica|Atletico Madrid|Bayern Munich|Sporting CP|Swansea|Zenit SPb|Besiktas|Anzhi|Southampton|FC Porto|SC Freiburg|Olympique Lyon|Sevilla FC|Dep La Coruna|La Coruna|Newcastle|FK|FC Augsburg|AZ Alkmaar|Brighton|Birmingham|FC Basel|Dynamo Kyiv|Feyenoord|Crystal Palace|Celta de Vigo|KRC Genk|Leicester|Torino|Spartak Moscow|RSC Anderlecht|Wolves|West Brom|Juventus|Galatasaray|Stade Rennais|Sunderland|Celtic|Bologna|G Bordeaux|QPR|Lens|Club Brugge|Hamburger SV|SaintEtienne|Dinamo Zagreb|River Plate|Aston Villa|FC Twente|Montpellier|Reggina|Werder Bremen|Shakhtar D|AJ Auxerre|Partizan|Loko Moscow|Fulham|Vasco da Gama|Fenerbahce|Middlesbrough|Norwich|Cardiff|Rangers|OGC Nice|Ternana|Blackburn|Udinese Calcio|Udinese|Watford|Portsmouth|Atalanta|Malaga CF|RB Leipzig|FC Nantes|Gremio|SSC Napoli|Internacional|Chievo Verona|Vitesse|Leeds|TSG Hoffenheim|VfL Wolfsburg|Guimaraes|Brondby IF|FC Copenhagen|Espanyol|Standard Liege|Dynamo Kyiv|Heerenveen|Maldonado|KAS Eupen|Real Sociedad|Hertha BSC|FC Midtjylland round|Al Sadd|Red Star|Anzhi|Paris SG|RB Salzburg|FC Koln|FC Lorient|CSKA Moscow|AC Parma|Heerenveen|Olympiacos|CF Pachuca|Corinthians|Estudiantes|Toulouse|UD Las Palmas|FC Empoli|CD Leganes|Bournemouth|Independiente|Heart of Midl|RCD Mallorca|FSV Mainz|Bolton|Huddersfield|Maldonado|Steaua Bukarest|SM Caen|HNK Rijeka|KAA Gent|Brescia|Sampdoria|Fluminense|CS Sedan|FC Sao Paulo B |Wigan|Villarreal CF|Valencia CF|Hull City|VfB Stuttgart|Hajduk Split|Nacional|Levante UD|Dinamo Moscow|Granada CF|US Palermo|Santos FC|Bristol City|AtleticoPR|Burnley|Chivas")
+
+# Fix Jermain Lens
+mydatafinal$player[391] <- "Jermain Lens"
+```
+
+NOTE: More data will be added, as this set isn't complete. (For instance, it only has Salah's move from FC Basel to Chelsea, but not from AS Roma to Liverpool). The .csv file will be updated as more data is added.
+
+
+## Export as .csv
+
+```{r}
+write.csv(mydatafinal,"../Clean Data/International Transfers.csv")
+```
+
